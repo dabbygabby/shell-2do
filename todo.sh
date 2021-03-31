@@ -1,7 +1,7 @@
 #!/bin/bash
 
 source "$HOME/shell-2do/config.md"
-echo $ACTIVE_FILE
+
 filepath=$ACTIVE_FILE
 archivedFilepath="$HOME/shell-2do/archive/"
 
@@ -109,6 +109,12 @@ clear2do() {
     else
         echo "List not deleted"
     fi
+}
+
+mk2dolist(){
+echo "what would you use this to do list for?"
+read listname
+touch $TODOFILES/$listname
 }
 
 help2do() {
