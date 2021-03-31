@@ -1,7 +1,9 @@
 #!/bin/bash
 
-filepath="/home/dabbygabby/todoshellfiles/todo.md"
-archivedFilepath="/home/dabbygabby/todoshellfiles/archive/"
+source "$HOME/shell-2do/config.md"
+echo $ACTIVE_FILE
+filepath=$ACTIVE_FILE
+archivedFilepath="$HOME/shell-2do/archive/"
 
 # Helper function to get numbee of lines in the todoList
 
