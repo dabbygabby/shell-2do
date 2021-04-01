@@ -1,24 +1,24 @@
 #!/bin/bash
 
-source "$HOME/shell-2do/config.md"
+source $HOME/shell-2do/config.sh
 
-filepath=$ACTIVE_FILE
-archivedFilepath="$HOME/shell-2do/archive/"
+activetodo=$TODOFOLDER/$ACTIVE_FILE
+archivedFilepath=$HOME/shell-2do/archive/
 
 # Helper function to get numbee of lines in the todoList
 
 len2do() {
-    Tasks_remaining=$(wc -l <$filepath)
+    Tasks_remaining=$(wc -l <$activetodo)
     return $(($Tasks_remaining + 1))
 }
 
-2do() {
+mk2do() {
     if [ $# -eq 0 ]; then
         echo "no task was provided"
         echo "run help2do to see usage"
     else
         len2do
-        echo "$? (_) $1" >>$filepath
+        echo "$? (_) $1" >>$activetodo
     fi
 }
 
@@ -31,9 +31,9 @@ check2do() {
         while read line; do
             chars=${line:0:5}
             if [[ $chars == $query ]]; then
-                sed -i "s/$chars/$1 (x)/g" $filepath
+                sed -i "s/$chars/$1 (x)/g" $activetodo
             fi
-        done <$filepath
+        done <$activetodo
     fi
 }
 
@@ -46,16 +46,16 @@ uncheck2do() {
         while read line; do
             chars=${line:0:5}
             if [[ $chars == $query ]]; then
-                sed -i "s/$chars/$1 (_)/g" $filepath
+                sed -i "s/$chars/$1 (_)/g" $activetodo
             fi
-        done <$filepath
+        done <$activetodo
     fi
 }
 
 lsall2do() {
     while read line; do
         echo $line
-    done <$filepath
+    done <$activetodo
 }
 
 lscomplete2do() {
@@ -65,7 +65,7 @@ lscomplete2do() {
         if [[ $chars == $query ]]; then
             echo $line
         fi
-    done <$filepath
+    done <$activetodo
 }
 
 ls2do() {
@@ -75,7 +75,7 @@ ls2do() {
         if [[ $chars == $query ]]; then
             echo $line
         fi
-    done <$filepath
+    done <$activetodo
 }
 
 rm2do() {
@@ -88,12 +88,12 @@ rm2do() {
         while read line; do
             chars=${line:0:5}
             if [[ $chars == $query ]]; then
-                sed -i "s/$line//g" $filepath
+                sed -i "s/$line//g" $activetodo
             fi
             if [[ $chars == $query2 ]]; then
-                sed -i "s/$line//g" $filepath
+                sed -i "s/$line//g" $activetodo
             fi
-        done <$filepath
+        done <$activetodo
     fi
 }
 
@@ -104,17 +104,39 @@ clear2do() {
     echo $option
     if [[ $option == 'y' || $option == 'Y' ]]; then
         echo "deleted"
-        mv $filepath $archivedFilepath
-        touch $filepath
+        sudo mv $activetodo $archivedFilepath
+        sudo touch $activetodo
     else
         echo "List not deleted"
     fi
 }
 
-mk2dolist(){
-echo "what would you use this to do list for?"
-read listname
-touch $TODOFILES/$listname
+mk2dolist() {
+    echo "what would you use this to do list for?"
+    read listname
+    sudo touch $TODOFOLDER/$listname.md
+    echo "$listname saved successfully!"
+}
+
+active2do() {
+    echo $ACTIVE_FILE
+}
+
+list2do() {
+    ls $TODOFOLDER
+}
+
+switch2do() {
+    if [ $# -eq 0 ]; then
+        echo "please provide a list name to switch to"
+        echo "run help2do to see usage"
+        echo "\n=================AVAILABLE LISTS ===================\n"
+        list2do
+    else
+        export ACTIVE_FILE=$1.md
+        echo $ACTIVE_FILE
+        activetodo=$TODOFOLDER/$ACTIVE_FILE
+    fi
 }
 
 help2do() {
@@ -123,7 +145,7 @@ help2do() {
     echo "available commands-"
     echo "COMMAND         DESCRIPTION                   Usage example"
     echo "ls2do           'list all incomplete todos'   ls2do"
-    echo "2do             'add new todo'                mk2do 'this is a new task(string)"
+    echo "mk2do           'add new todo'                mk2do 'this is a new task(string)"
     echo "check2do        'mark as done with todoId'    check2do 1"
     echo "uncheck2do      'mark as undone with todoId'  uncheck2do 1"
     echo "lsall2do        'lists all todos'             lsall2do"
@@ -131,4 +153,9 @@ help2do() {
     echo "len2do          'length of the todo list'     len2do"
     echo "clear2do        'deletes the todo list'       clear2do"
     echo "rm2do           'deletes todo with todoID'    rm2do 1"
+    echo "mk2dolist       'make a new todo list'        mk2dolist"
+    echo "switch2do       'switch todo list'            switch2do todo"
+    echo "active2do       'current to do list'          active2do"
+    echo "list2do         'list all to do lists'        list2do"
+
 }
