@@ -9,7 +9,22 @@ archivedFilepath=$HOME/Desktop/shell-2do/archive/
 
 len2do() {
     Tasks_remaining=$(wc -l <$activetodo)
-    return $(($Tasks_remaining + 1))
+    x=$(($Tasks_remaining + 1))
+    # echo $x
+    len=$(expr length $x)
+    # echo $len
+    if [[ $len == 1 ]]; then
+        prepend=$(printf '%03d' $x)
+    fi
+    if [[ $len == 2 ]]; then
+        prepend=$(printf '%03d' $x)
+    fi
+    if [[ $len == 3 ]]; then
+        prepend=$(printf '%03d' $x)
+    fi
+    result=$prepend
+    echo $result
+    return $result
 }
 
 mk2do() {
@@ -17,8 +32,9 @@ mk2do() {
         echo "no task was provided"
         echo "run help2do to see usage"
     else
-        len2do
-        echo "$? (_) $1" >>$activetodo
+        x=$(len2do)
+        # echo "resulted in $x append"
+        echo "$x (_) $1" >>$activetodo
     fi
 }
 
@@ -29,7 +45,7 @@ check2do() {
     else
         query="$1 (_)"
         while read line; do
-            chars=${line:0:5}
+            chars=${line:0:7}
             if [[ $chars == $query ]]; then
                 sed -i "s/$chars/$1 (x)/g" $activetodo
             fi
@@ -44,7 +60,7 @@ uncheck2do() {
     else
         query="$1 (x)"
         while read line; do
-            chars=${line:0:5}
+            chars=${line:0:7}
             if [[ $chars == $query ]]; then
                 sed -i "s/$chars/$1 (_)/g" $activetodo
             fi
@@ -61,7 +77,7 @@ lsall2do() {
 lscomplete2do() {
     query="(x)"
     while read line; do
-        chars=${line:2:3}
+        chars=${line:4:3}
         if [[ $chars == $query ]]; then
             echo $line
         fi
@@ -71,7 +87,8 @@ lscomplete2do() {
 ls2do() {
     query="(_)"
     while read line; do
-        chars=${line:2:3}
+        chars=${line:4:3}
+        # echo $chars
         if [[ $chars == $query ]]; then
             echo $line
         fi
@@ -86,7 +103,7 @@ rm2do() {
         query="$1 (x)"
         query2="$1 (_)"
         while read line; do
-            chars=${line:0:5}
+            chars=${line:0:7}
             if [[ $chars == $query ]]; then
                 sed -i "s/$line//g" $activetodo
             fi

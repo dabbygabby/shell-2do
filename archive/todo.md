@@ -1,5 +1,9 @@
-1 (_) share the extension with bois
-2 (_) list out;bois to share(call)
-3 (x) reddit threads to share it to
-4 (_) does it work?
-5 (x) testing to do, check if it works
+001 (x) new
+002 (_) new
+003 (_) new
+004 (_) new
+005 (_) new
+006 (_) new
+007 (_) new
+ (_) new
+009 (_) new
