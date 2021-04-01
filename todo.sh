@@ -1,9 +1,9 @@
 #!/bin/bash
 
-source $HOME/shell-2do/config.sh
+source $HOME/Desktop/shell-2do/config.sh
 
 activetodo=$TODOFOLDER/$ACTIVE_FILE
-archivedFilepath=$HOME/shell-2do/archive/
+archivedFilepath=$HOME/Desktop/shell-2do/archive/
 
 # Helper function to get numbee of lines in the todoList
 
@@ -104,8 +104,8 @@ clear2do() {
     echo $option
     if [[ $option == 'y' || $option == 'Y' ]]; then
         echo "deleted"
-        sudo mv $activetodo $archivedFilepath
-        sudo touch $activetodo
+        mv $activetodo $archivedFilepath
+        touch $activetodo
     else
         echo "List not deleted"
     fi
@@ -114,7 +114,7 @@ clear2do() {
 mk2dolist() {
     echo "what would you use this to do list for?"
     read listname
-    sudo touch $TODOFOLDER/$listname.md
+    touch $TODOFOLDER/$listname.md
     echo "$listname saved successfully!"
 }
 
