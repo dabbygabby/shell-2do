@@ -139,6 +139,19 @@ switch2do() {
     fi
 }
 
+rename2do() {
+    if [ $# -eq 0 ]; then
+        echo "please provide a valid name"
+        echo "run help2do to see usage"
+    else
+        mv $TODOFOLDER/$ACTIVE_FILE $TODOFOLDER/$1.md
+        export ACTIVE_FILE=$1.md
+        echo "list renamed to"
+        active2do
+        activetodo=$TODOFOLDER/$ACTIVE_FILE
+    fi
+}
+
 help2do() {
     echo "2do list HELP"
     echo "AUTHOR: dabbygabby"
